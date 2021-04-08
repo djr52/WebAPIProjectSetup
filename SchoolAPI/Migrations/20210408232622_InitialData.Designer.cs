@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SchoolAPI.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20210408015710_Initial")]
-    partial class Initial
+    [Migration("20210408232622_InitialData")]
+    partial class InitialData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,6 +28,12 @@ namespace SchoolAPI.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("OrganizationId");
 
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("OrgName")
                         .IsRequired()
                         .HasMaxLength(60)
@@ -41,11 +47,15 @@ namespace SchoolAPI.Migrations
                         new
                         {
                             Id = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
+                            City = "Bloomfield",
+                            Country = "USA",
                             OrgName = "xyz org"
                         },
                         new
                         {
                             Id = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3"),
+                            City = "Ridgefield Park",
+                            Country = "USA",
                             OrgName = "lmnop org"
                         });
                 });

@@ -8,18 +8,17 @@ using Contracts;
 using AutoMapper;
 using Entities.DataTransferObjects;
 
-
 namespace SchoolAPI.Controllers
 {
-    [Route("api/organizations")]
+    [Route("api/users")]
     [ApiController]
-    public class OrganizationController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IRepositoryManager _repository;
         private readonly ILoggingManager _logger;
         private readonly IMapper _mapper;
 
-        public OrganizationController(IRepositoryManager repository, ILoggingManager logger, IMapper mapper)
+        public UserController(IRepositoryManager repository, ILoggingManager logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
@@ -28,42 +27,42 @@ namespace SchoolAPI.Controllers
         }
         [HttpGet]
 
-        public IActionResult GetOrganizations()
+        public IActionResult GetUsers()
         {
             try
             {
-                var organizations = _repository.Organization.GetAllOrganizations(trackChanges: false);
-                return Ok(organizations);
+                var users = _repository.User.GetAllUsers(trackChanges: false);
+                return Ok(users);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong in the {nameof(GetOrganizations)} action {ex}");
+                _logger.LogError($"Something went wrong in the {nameof(GetUsers)} action {ex}");
                 return StatusCode(500, "Internal server error");
             }
 
         }
         [HttpGet("{id}")]
-        public IActionResult GetOrganization(Guid id)
+        public IActionResult GetUser(Guid id)
         {
             try
 
             {
-                var organization = _repository.Organization.GetOrganization(id, trackChanges: false);
-                if(organization == null)
+                var user = _repository.User.GetUser(id, trackChanges: false);
+                if (user == null)
                 {
                     _logger.LogError($"Organization with ID: {id} doesn't exist in the database");
                     return NotFound();
                 }
                 else
                 {
-                    var organizationDto = _mapper.Map<OrganizationDto>(organization);
-                    return Ok(organizationDto);
+                    var userDto = _mapper.Map<UserDto>(user);
+                    return Ok(userDto);
                 }
 
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong in the {nameof(GetOrganization)} action {ex}");
+                _logger.LogError($"Something went wrong in the {nameof(GetUser)} action {ex}");
                 return StatusCode(500, "Internal server error");
             }
 
@@ -72,7 +71,5 @@ namespace SchoolAPI.Controllers
 
 
 
-
     }
 }
-
