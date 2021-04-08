@@ -10,14 +10,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchoolAPI", "SchoolAPI\Scho
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{1435E359-FAC1-4563-98F4-9C71F1535713}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1D70A081-8DAE-415F-AC92-AEB19C7E104A} = {1D70A081-8DAE-415F-AC92-AEB19C7E104A}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerService", "LoggerManager\LoggerService.csproj", "{9B1789BD-F0E7-42BC-82E0-3CB7179AA745}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{13B58274-68FC-4761-836A-4EFD74A9C51F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{1D70A081-8DAE-415F-AC92-AEB19C7E104A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{1D70A081-8DAE-415F-AC92-AEB19C7E104A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{C4227814-AA3F-4A3C-8E3A-B8BCF45370AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{C4227814-AA3F-4A3C-8E3A-B8BCF45370AD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1435E359-FAC1-4563-98F4-9C71F1535713} = {1435E359-FAC1-4563-98F4-9C71F1535713}
 		{1D70A081-8DAE-415F-AC92-AEB19C7E104A} = {1D70A081-8DAE-415F-AC92-AEB19C7E104A}

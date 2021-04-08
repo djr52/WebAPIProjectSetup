@@ -12,7 +12,7 @@ namespace SchoolAPI.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private ILoggingManager _logger;
+        private readonly ILoggingManager _logger;
 
         private static readonly string[] Summaries = new[]
         {
