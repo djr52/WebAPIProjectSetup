@@ -17,7 +17,7 @@ namespace Entities.Models
         
         public string City { get; set; }
 
-        public string Country { get; set; } //Causes a Sql server connection error, (Invalid column names) FIX IT
+        public string Country { get; set; }
         
         public ICollection<User> Users { get; set; }
     }
