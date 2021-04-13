@@ -35,6 +35,11 @@ namespace SchoolAPI
 
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
+            services.Configure<Microsoft.AspNetCore.Mvc.ApiBehaviorOptions>(options => {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+            services.ConfigureSwagger();
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +51,10 @@ namespace SchoolAPI
             }
 
             //app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI(s => {
+                s.SwaggerEndpoint("/swagger/v1/swagger.json", "School API v1");
+            });
 
             app.UseRouting();
 

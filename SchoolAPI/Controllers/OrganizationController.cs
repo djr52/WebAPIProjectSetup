@@ -14,6 +14,7 @@ namespace SchoolAPI.Controllers
 {
     [Route("api/organizations")]
     [ApiController]
+    [ApiExplorerSettings(GroupName ="v1")]
     public class OrganizationController : ControllerBase
     {
         private readonly IRepositoryManager _repository;
