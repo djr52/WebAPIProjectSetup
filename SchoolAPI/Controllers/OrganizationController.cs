@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Contracts;
 using AutoMapper;
@@ -34,7 +31,7 @@ namespace SchoolAPI.Controllers
             var organizations = _repository.Organization.GetAllOrganizations(trackChanges: false);
 
             var organizationDto = _mapper.Map<IEnumerable<OrganizationDto>>(organizations);
-
+            //throw new Exception("Exception");
             return Ok(organizationDto);
         }
 
