@@ -4,3 +4,4 @@
 2021-04-26 13:18:54.1033 INFO Organiation with id: 00000000-0000-0000-0000-000000000000 doesn't exist in the database.
 2021-04-26 13:21:19.2759 INFO Organization with id: c9d4c053-49b6-410c-bc78-2d54a9373739 doesn't exist in the database.
 2021-04-26 13:31:37.6455 INFO Organization with id: c9d4c053-49b6-410c-bc78-2d54a9373739 doesn't exist in the database.
+2021-04-26 17:50:20.4562 ERROR Invalid model state for the object. Controller: User, Action: CreateUser

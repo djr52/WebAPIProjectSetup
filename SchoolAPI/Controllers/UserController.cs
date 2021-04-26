@@ -9,6 +9,8 @@ using AutoMapper;
 using Entities.DataTransferObjects;
 using Entities.Models;
 using ActionFilters;
+using Entities.RequestFeatures;
+using Newtonsoft.Json;
 
 namespace SchoolAPI.Controllers
 {
@@ -30,11 +32,13 @@ namespace SchoolAPI.Controllers
 
         }
         [HttpGet(Name = "getAllUsers")]
-        public IActionResult GetUsers()
+        public IActionResult GetUsers([FromQuery] UserParameters userParameters)
         {
-            var users = _repository.User.GetAllUsers(trackChanges: false);
+            var usersFromDb = _repository.User.GetAllUsers(userParameters, trackChanges: false);
+            Response.Headers.Add("X-Pagination",
+                JsonConvert.SerializeObject(usersFromDb.MetaData));
 
-            var userDto = _mapper.Map<IEnumerable<UserDto>>(users);
+            var userDto = _mapper.Map<IEnumerable<UserDto>>(usersFromDb);
 
             return Ok(userDto);
 
@@ -44,7 +48,8 @@ namespace SchoolAPI.Controllers
         public IActionResult GetUser(Guid id)
         {
 
-             var user = HttpContext.Items["user"] as User;
+            var user = HttpContext.Items["user"] as User;
+
              var userDto = _mapper.Map<UserDto>(user);
              return Ok(userDto);
 

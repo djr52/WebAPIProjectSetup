@@ -5,7 +5,10 @@ using Contracts;
 using AutoMapper;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using Entities.RequestFeatures;
 using ActionFilters;
+using Newtonsoft.Json;
+
 
 
 namespace SchoolAPI.Controllers
@@ -27,11 +30,13 @@ namespace SchoolAPI.Controllers
 
         }
         [HttpGet(Name = "getAllOrganizations")]
-        public IActionResult GetOrganizations()
+        public IActionResult GetOrganizations([FromQuery] OrganizationParameters orgParameters)
         {
-            var organizations = _repository.Organization.GetAllOrganizations(trackChanges: false);
+            var organizationsFromDb = _repository.Organization.GetAllOrganizations(orgParameters, trackChanges: false);
+            Response.Headers.Add("X-Pagination",
+                 JsonConvert.SerializeObject(organizationsFromDb.MetaData));
 
-            var organizationDto = _mapper.Map<IEnumerable<OrganizationDto>>(organizations);
+            var organizationDto = _mapper.Map<IEnumerable<OrganizationDto>>(organizationsFromDb);
             //throw new Exception("Exception");
             return Ok(organizationDto);
             
