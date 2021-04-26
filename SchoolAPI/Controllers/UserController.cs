@@ -8,6 +8,7 @@ using Contracts;
 using AutoMapper;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using ActionFilters;
 
 namespace SchoolAPI.Controllers
 {
@@ -29,7 +30,6 @@ namespace SchoolAPI.Controllers
 
         }
         [HttpGet(Name = "getAllUsers")]
-
         public IActionResult GetUsers()
         {
             var users = _repository.User.GetAllUsers(trackChanges: false);
@@ -40,45 +40,21 @@ namespace SchoolAPI.Controllers
 
         }
         [HttpGet("{id}", Name = "getUserById")]
+        [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         public IActionResult GetUser(Guid id)
         {
-            try
 
-            {
-                var user = _repository.User.GetUser(id, trackChanges: false);
-                if (user == null)
-                {
-                    _logger.LogError($"Organization with ID: {id} doesn't exist in the database");
-                    return NotFound();
-                }
-                else
-                {
-                    var userDto = _mapper.Map<UserDto>(user);
-                    return Ok(userDto);
-                }
+             var user = HttpContext.Items["user"] as User;
+             var userDto = _mapper.Map<UserDto>(user);
+             return Ok(userDto);
 
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong in the {nameof(GetUser)} action {ex}");
-                return StatusCode(500, "Internal server error");
-            }
 
         }
 
         [HttpPost(Name = "createUser")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateUser([FromBody] UserForCreationDto user)
         {
-            if (user == null)
-            {
-                _logger.LogError("User ForCreationDto object sent from client is null.");
-                return BadRequest("User ForCreationDto object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the UserForCreationDto object");
-                return UnprocessableEntity(ModelState);
-            }
 
             var userEntity = _mapper.Map<User>(user);
 
@@ -91,24 +67,12 @@ namespace SchoolAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         public IActionResult UpdateUser(Guid id, [FromBody] UserForUpdateDto user)
         {
-            if (user == null)
-            {
-                _logger.LogError("UserForUpdateDto object sent from client is null.");
-                return BadRequest("UserForUpdateDto object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the UserForUpdateDto object");
-                return UnprocessableEntity(ModelState);
-            }
-            var userEntity = _repository.User.GetUser(id, trackChanges: true);
-            if (userEntity == null)
-            {
-                _logger.LogInfo($"User with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+
+            var userEntity = HttpContext.Items["user"] as User;
 
             _mapper.Map(user, userEntity);
             _repository.Save();
@@ -117,14 +81,10 @@ namespace SchoolAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         public IActionResult DeleteUser(Guid id)
         {
-            var user = _repository.User.GetUser(id, trackChanges: false);
-            if (user == null)
-            {
-                _logger.LogInfo($"User with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+            var user = HttpContext.Items["user"] as User;
 
             _repository.User.DeleteUser(user);
             _repository.Save();

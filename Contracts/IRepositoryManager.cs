@@ -10,5 +10,6 @@ namespace Contracts
         IUserRepository User { get; }
 
         void Save();
+        
     }
 }

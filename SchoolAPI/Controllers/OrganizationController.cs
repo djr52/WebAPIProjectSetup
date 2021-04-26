@@ -5,6 +5,7 @@ using Contracts;
 using AutoMapper;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using ActionFilters;
 
 
 namespace SchoolAPI.Controllers
@@ -33,37 +34,26 @@ namespace SchoolAPI.Controllers
             var organizationDto = _mapper.Map<IEnumerable<OrganizationDto>>(organizations);
             //throw new Exception("Exception");
             return Ok(organizationDto);
+            
         }
-
+        
         [HttpGet("{id}", Name = "getOrganizationById")]
+        [ServiceFilter(typeof(ValidateOrganizationExistsAttribute))]
+
         public IActionResult GetOrganization(Guid id)
         {
-            var organization = _repository.Organization.GetOrganization(id, trackChanges: false); if (organization == null)
-            {
-                _logger.LogInfo($"Organization with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
-            else
-            {
-                var organizationDto = _mapper.Map<OrganizationDto>(organization);
-                return Ok(organizationDto);
-            }
+            var organization = HttpContext.Items["organization"] as Organization;
+
+            var organizationDto = _mapper.Map<OrganizationDto>(organization);
+            return Ok(organizationDto);
+            
+            
         }
 
         [HttpPost(Name = "createOrganization")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateOrganization([FromBody] OrganizationForCreationDto organization)
         {
-            if (organization == null)
-            {
-                _logger.LogError("Organization ForCreationDto object sent from client is null.");
-                return BadRequest("Organization ForCreationDto object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the OrganizationForCreationDto object");
-                return UnprocessableEntity(ModelState);
-            }
-
             var organizationEntity = _mapper.Map<Organization>(organization);
 
             _repository.Organization.CreateOrganization(organizationEntity);
@@ -75,24 +65,12 @@ namespace SchoolAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateOrganizationExistsAttribute))]
         public IActionResult UpdateOrganization(Guid id, [FromBody] OrganizationForUpdateDto organization)
         {
-            if (organization == null)
-            {
-                _logger.LogError("OrganizationForUpdateDto object sent from client is null.");
-                return BadRequest("OrganizationForUpdateDto object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the OrganizationForUpdateDto object");
-                return UnprocessableEntity(ModelState);
-            }
-            var organizationEntity = _repository.Organization.GetOrganization(id, trackChanges: true);
-            if (organizationEntity == null)
-            {
-                _logger.LogInfo($"Organization with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+
+            var organizationEntity = HttpContext.Items["organization"] as Organization;
 
             _mapper.Map(organization, organizationEntity);
             _repository.Save();
@@ -101,14 +79,10 @@ namespace SchoolAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(ValidateOrganizationExistsAttribute))]
         public IActionResult DeleteOrganization(Guid id)
         {
-            var organization = _repository.Organization.GetOrganization(id, trackChanges: false);
-            if (organization == null)
-            {
-                _logger.LogInfo($"Organiation with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+            var organization = HttpContext.Items["organization"] as Organization;
 
             _repository.Organization.DeleteOrganization(organization);
             _repository.Save();
