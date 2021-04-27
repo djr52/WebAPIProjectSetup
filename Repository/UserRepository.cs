@@ -22,7 +22,7 @@ namespace Repository
         {
             var user = FindAll(trackChanges)
                 .Search(userParameters.SearchTerm)
-                .OrderBy(e => e.UserName)
+                .Sort(userParameters.OrderBy)
                 .ToList();
 
             return PagedList<User>

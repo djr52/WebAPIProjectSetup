@@ -20,7 +20,7 @@ namespace Repository
         public PagedList<Organization> GetAllOrganizations(OrganizationParameters orgParameters, bool trackChanges)
         {
             var organization = FindAll(trackChanges)
-                .OrderBy(e => e.OrgName)
+                .Sort(orgParameters.OrderBy)
                 .FilterCity(orgParameters.CityFilter)
                 .Search(orgParameters.SearchTerm)
                 .ToList();
