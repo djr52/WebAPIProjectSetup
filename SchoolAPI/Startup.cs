@@ -44,7 +44,13 @@ namespace SchoolAPI
                 options.SuppressModelStateInvalidFilter = true;
             });
             services.ConfigureSwagger();
-            services.AddControllers();
+            services.AddControllers(config =>
+            {
+                config.RespectBrowserAcceptHeader = true;
+                config.ReturnHttpNotAcceptable = true;
+
+            }).AddXmlDataContractSerializerFormatters()
+            .AddCustomCSVFormatter();
 
             services.AddScoped<ValidationFilterAttribute>();
             services.AddScoped<ValidateOrganizationExistsAttribute>();
@@ -52,8 +58,7 @@ namespace SchoolAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
-        ILoggingManager logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggingManager logger)
         {
             if (env.IsDevelopment())
             {

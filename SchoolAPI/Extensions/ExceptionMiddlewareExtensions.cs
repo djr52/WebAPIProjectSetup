@@ -13,8 +13,7 @@ namespace SchoolAPI.Extensions
         {
             app.UseMiddleware<ExceptionHandlerMiddleware>();
         }
-        public static void ConfigureExceptionHandler(this IApplicationBuilder app,
-       ILoggingManager logger)
+        public static void ConfigureExceptionHandler(this IApplicationBuilder app, ILoggingManager logger)
         {
             app.UseExceptionHandler(appError =>
             {
