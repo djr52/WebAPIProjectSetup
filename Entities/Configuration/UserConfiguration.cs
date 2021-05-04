@@ -11,6 +11,7 @@ namespace Entities.Configuration
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            /*
             builder.HasData
             (
                 new User
@@ -34,6 +35,7 @@ namespace Entities.Configuration
                      OrganizationId = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3")
                  }
             );
+            */
         }
     }
 }

@@ -32,9 +32,9 @@ namespace SchoolAPI
         {
             var response = context.HttpContext.Response;
             var buffer = new StringBuilder();
-            if (context.Object is IEnumerable<OrganizationDto>)
+            if (context.Object is IEnumerable<OrganizationDto> enumerable)
             {
-                foreach (var organization in (IEnumerable<OrganizationDto>)context.Object)
+                foreach (var organization in enumerable)
                 {
                     FormatCsv(buffer, organization);
                 }

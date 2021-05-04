@@ -8,8 +8,7 @@ using Entities.Models;
 using Entities.RequestFeatures;
 using ActionFilters;
 using Newtonsoft.Json;
-
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace SchoolAPI.Controllers
 {
@@ -29,7 +28,7 @@ namespace SchoolAPI.Controllers
             _mapper = mapper;
 
         }
-        [HttpGet(Name = "getAllOrganizations")]
+        [HttpGet(Name = "getAllOrganizations"), Authorize]
         public IActionResult GetOrganizations([FromQuery] OrganizationParameters orgParameters)
         {
             var organizationsFromDb = _repository.Organization.GetAllOrganizations(orgParameters, trackChanges: false);

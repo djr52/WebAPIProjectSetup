@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using System.IO;
 using ActionFilters;
+using Microsoft.IdentityModel.Logging;
 
 namespace SchoolAPI
 {
@@ -55,6 +56,12 @@ namespace SchoolAPI
             services.AddScoped<ValidationFilterAttribute>();
             services.AddScoped<ValidateOrganizationExistsAttribute>();
             services.AddScoped<ValidateUserExistsAttribute>();
+            services.AddScoped<IAuthenticationManager, AuthenticationManager>();
+
+            services.AddAuthentication();
+            IdentityModelEventSource.ShowPII = true;
+            services.ConfigureIdentity();
+            services.ConfigureJWT(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,12 +93,15 @@ namespace SchoolAPI
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+
         }
     }
 }

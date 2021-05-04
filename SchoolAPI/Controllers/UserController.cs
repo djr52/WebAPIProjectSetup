@@ -56,8 +56,10 @@ namespace SchoolAPI.Controllers
 
         }
 
+        /*
         [HttpPost(Name = "createUser")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        
         public IActionResult CreateUser([FromBody] UserForCreationDto user)
         {
 
@@ -70,6 +72,7 @@ namespace SchoolAPI.Controllers
 
             return CreatedAtRoute("getUserById", new { id = userToReturn.Id }, userToReturn);
         }
+        */
 
         [HttpPut("{id}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
